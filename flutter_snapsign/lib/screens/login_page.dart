@@ -5,55 +5,45 @@ import 'package:flutter_snapsign/components/my_textfield.dart';
 import 'package:flutter_snapsign/components/square_tile.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  // sign user in method
   void signUserIn() async {
-    // show loading circle
     showDialog(
       context: context,
       builder: (context) {
         return const Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            color: Colors.green,
+          ),
         );
       },
     );
 
-    // try sign in
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
-      // pop the loading circle
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
-      // pop the loading circle
       Navigator.pop(context);
-      // WRONG EMAIL
       if (e.code == 'user-not-found') {
-        // show error to user
         wrongEmailMessage();
       }
-
-      // WRONG PASSWORD
       else if (e.code == 'wrong-password') {
-        // show error to user
         wrongPasswordMessage();
       }
     }
   }
 
-  // wrong email message popup
   void wrongEmailMessage() {
     showDialog(
       context: context,
@@ -71,7 +61,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // wrong password message popup
   void wrongPasswordMessage() {
     showDialog(
       context: context,
@@ -92,75 +81,93 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 50),
-
-              // logo
-              const Icon(
-                Icons.lock,
-                size: 100,
+              Image.asset(
+                'lib/images/snapSignWhiteBackground.jpg',
+                width: 150,
+                height: 150,
               ),
 
-              const SizedBox(height: 50),
-
-              // welcome back, you've been missed!
-              Text(
-                'Welcome back you\'ve been missed!',
+              const Text(
+                'Login',
                 style: TextStyle(
-                  color: Colors.grey[700],
-                  fontSize: 16,
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
 
-              const SizedBox(height: 25),
+              const SizedBox(height: 5),
 
-              // email textfield
+              const Text(
+                'Provide login details',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.grey,
+                ),
+              ),
+
               MyTextField(
                 controller: emailController,
                 hintText: 'Email',
                 obscureText: false,
+                icon: Icons.email, 
               ),
 
-              const SizedBox(height: 10),
-
-              // password textfield
               MyTextField(
                 controller: passwordController,
                 hintText: 'Password',
                 obscureText: true,
+                icon: Icons.lock,
               ),
 
-              const SizedBox(height: 10),
-
-              // forgot password?
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
                       'Forgot Password?',
-                      style: TextStyle(color: Colors.grey[600]),
+                      style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
                     ),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 25),
+              const SizedBox(height: 16),
 
-              // sign in button
               MyButton(
                 onTap: signUserIn,
               ),
 
-              const SizedBox(height: 50),
+              const SizedBox(height: 16),
 
-              // or continue with
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Do not have an account?',
+                    style: TextStyle(color: Colors.grey[700]),
+                  ),
+                  const SizedBox(width: 4),
+                  const Text(
+                    'Register now',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 16),
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
@@ -174,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Text(
-                        'Or continue with',
+                        'OR',
                         style: TextStyle(color: Colors.grey[700]),
                       ),
                     ),
@@ -188,37 +195,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
 
-              const SizedBox(height: 50),
-
-              // google + apple sign in buttons
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  // google button
+                children: [
                   SquareTile(imagePath: 'lib/images/googleOutline.png'),
                 ],
               ),
-
-              const SizedBox(height: 50),
-
-              // not a member? register now
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Not a member?',
-                    style: TextStyle(color: Colors.grey[700]),
-                  ),
-                  const SizedBox(width: 4),
-                  const Text(
-                    'Register now',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              )
             ],
           ),
         ),
