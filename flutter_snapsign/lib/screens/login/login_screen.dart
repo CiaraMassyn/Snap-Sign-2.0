@@ -18,7 +18,7 @@ class LoginPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 25),
+                const SizedBox(height: 15),
                 Image.asset(
                   'lib/images/snapSignWhiteBackground.jpg',
                   height: 100,
@@ -52,7 +52,7 @@ class LoginPage extends StatelessWidget {
                   icon: Icons.lock,
                   obscureText: true,
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 5),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
@@ -70,7 +70,7 @@ class LoginPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 5),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: ElevatedButton(

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "294403375544",
+    "project_id": "snapsign2-0",
+    "storage_bucket": "snapsign2-0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:294403375544:android:eb9c53ee3b4ae00a378f4d",
+        "android_client_info": {
+          "package_name": "com.example.flutter_snapsign"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBe-pk27oNzXwQ16HJ-Z42DbInLdT5WhxY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
