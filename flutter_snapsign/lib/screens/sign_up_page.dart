@@ -2,24 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_snapsign/components/my_button.dart';
 import 'package:flutter_snapsign/components/my_textfield.dart';
-import 'package:flutter_snapsign/components/square_tile.dart';
-import 'package:flutter_snapsign/screens/forgot_password_page.dart';
-import 'package:flutter_snapsign/screens/sign_up_page.dart';
-import 'package:flutter_snapsign/services/auth_services.dart';
+import 'package:flutter_snapsign/screens/auth_page.dart';
 
-class LoginPage extends StatefulWidget {
-  final Function()? onTap;
-  const LoginPage({super.key, required this.onTap});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
-  void signUserIn() async {
+  void signUserUp() async {
     showDialog(
       context: context,
       builder: (context) {
@@ -32,10 +29,14 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
+      if (passwordController.text == confirmPasswordController.text) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+      } else {
+        print("Passwords do not match!");
+      }
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
@@ -81,17 +82,10 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void navigateToForgotPasswordPage() {
+  void navigateToLoginPage() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),
-    );
-  }
-
-  void navigateToSignUpPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const SignUpPage()),
+      MaterialPageRoute(builder: (context) => const AuthPage()),
     );
   }
 
@@ -112,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 150,
                     ),
                     const Text(
-                      'Login',
+                      'Sign Up',
                       style: TextStyle(
                         fontSize: 24.0,
                         fontWeight: FontWeight.bold,
@@ -120,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 5),
                     const Text(
-                      'Provide login details',
+                      'Let\'s create an account!',
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.grey,
@@ -138,46 +132,34 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: true,
                       icon: Icons.lock,
                     ),
-                    GestureDetector(
-                      onTap: navigateToForgotPasswordPage,
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 25.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              'Forgot Password?',
-                              style: TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                     MyTextField(
+                      controller: confirmPasswordController,
+                      hintText: 'Confirm Password',
+                      obscureText: true,
+                      icon: Icons.lock,
                     ),
                     const SizedBox(height: 16),
                     MyButton(
-                      onTap: signUserIn, 
-                      text: 'Login',
+                      onTap: signUserUp, 
+                      text: 'Sign Up',
                     ),
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Do not have an account?',
+                          'Already have an account?',
                           style: TextStyle(color: Colors.grey[700]),
                         ),
                         GestureDetector(
-                          onTap: navigateToSignUpPage,
+                          onTap: navigateToLoginPage,
                           child: const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 25.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                'Sign up now',
+                                'Login now',
                                 style: TextStyle(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,
@@ -186,42 +168,6 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              thickness: 0.5,
-                              color: Colors.grey[400],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Text(
-                              'OR',
-                              style: TextStyle(color: Colors.grey[700]),
-                            ),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              thickness: 0.5,
-                              color: Colors.grey[400],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SquareTile(
-                          onTap: () => AuthService().signInWithGoogle(),
-                          imagePath: 'lib/images/googleOutline.png', 
                         ),
                       ],
                     ),

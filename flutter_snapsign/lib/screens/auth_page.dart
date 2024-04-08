@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_snapsign/screens/login_page.dart';
+import 'package:flutter_snapsign/screens/login_or_signup_page.dart';
 import 'home_page.dart';
 
 class AuthPage extends StatelessWidget {
@@ -16,7 +16,7 @@ class AuthPage extends StatelessWidget {
             return HomePage();
           }
           else {
-            return LoginPage();
+            return LoginOrSignUpPage();
           }
         },
       ),
