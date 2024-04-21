@@ -1,10 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
-
+class ProfilePage extends StatelessWidget {
   final user = FirebaseAuth.instance.currentUser!;
+
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
@@ -27,19 +26,24 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Hi ${user.email}",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            Expanded(
-              child: Center(
-                child: Text(
-                  "Welcome to your dashboard!",
-                  style: TextStyle(fontSize: 16),
-                ),
+            Center(
+              child: CircleAvatar(
+                radius: 50,
+                backgroundImage: NetworkImage(
+                    'https://www.example.com/your-image.jpg'), 
               ),
             ),
+            SizedBox(height: 20),
+            Text(
+              'Email: ${user.email}',
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'User ID: ${user.uid}',
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 10),
           ],
         ),
       ),

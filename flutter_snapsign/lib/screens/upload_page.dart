@@ -1,14 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
-
+class UploadPage extends StatelessWidget {
+  
   final user = FirebaseAuth.instance.currentUser!;
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,23 +21,19 @@ class HomePage extends StatelessWidget {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: Center(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "Hi ${user.email}",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Icon(
+              Icons.cloud_upload,
+              size: 100,
+              color: Colors.grey,
             ),
             SizedBox(height: 20),
-            Expanded(
-              child: Center(
-                child: Text(
-                  "Welcome to your dashboard!",
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
+            Text(
+              'Upload your files here',
+              style: TextStyle(fontSize: 20),
             ),
           ],
         ),

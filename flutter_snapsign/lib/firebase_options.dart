@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -66,15 +63,27 @@ class DefaultFirebaseOptions {
     messagingSenderId: '294403375544',
     projectId: 'snapsign2-0',
     storageBucket: 'snapsign2-0.appspot.com',
+    iosClientId: '294403375544-lu1suvprmra5n41ks0vmpu673nbtkdoi.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterSnapsign',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyDdLS2ZWzO-DffX0JjTwmEe0sYeUESCuTg',
-    appId: '1:294403375544:ios:01c22a5abd041e0e378f4d',
+    appId: '1:294403375544:ios:10730edf2ce3214c378f4d',
     messagingSenderId: '294403375544',
     projectId: 'snapsign2-0',
     storageBucket: 'snapsign2-0.appspot.com',
-    iosBundleId: 'com.example.flutterSnapsign.RunnerTests',
+    iosClientId: '294403375544-lu1suvprmra5n41ks0vmpu673nbtkdoi.apps.googleusercontent.com',
+    iosBundleId: 'com.example.flutterSnapsign',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyBcZLKLC3g7fEvTd2R8HW4niPvuV4ZCM-0',
+    appId: '1:294403375544:web:777c2f9ce5474def378f4d',
+    messagingSenderId: '294403375544',
+    projectId: 'snapsign2-0',
+    authDomain: 'snapsign2-0.firebaseapp.com',
+    storageBucket: 'snapsign2-0.appspot.com',
+  );
+
 }
