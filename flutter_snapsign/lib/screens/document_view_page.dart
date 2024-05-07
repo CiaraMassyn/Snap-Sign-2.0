@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_snapsign/screens/dashboard_page.dart';
+import 'package:flutter_snapsign/screens/document_edit_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DocumentPreviewPage extends StatelessWidget {
   final String pdfUrl;
+  final String filePath;
 
-  const DocumentPreviewPage({Key? key, required this.pdfUrl, required String filePath}) : super(key: key);
+  const DocumentPreviewPage({Key? key, required this.pdfUrl, required this.filePath}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,6 @@ class DocumentPreviewPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Add PDF preview widget here
             ElevatedButton(
               onPressed: () {
                 _downloadPdf(pdfUrl);
@@ -26,7 +27,17 @@ class DocumentPreviewPage extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                // Navigate to home page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DocumentEditPage(filePath: filePath),
+                  ),
+                );
+              },
+              child: Text('Edit Document'),
+            ),
+            ElevatedButton(
+              onPressed: () {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => Dashboard()),

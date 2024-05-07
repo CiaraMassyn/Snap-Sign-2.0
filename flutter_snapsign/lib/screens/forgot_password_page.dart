@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_snapsign/components/my_button.dart'; // Import MyButton widget
-import 'package:flutter_snapsign/components/my_textfield.dart'; // Import MyTextField widget
+import 'package:flutter_snapsign/components/my_button.dart';
+import 'package:flutter_snapsign/components/my_textfield.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
@@ -20,18 +20,88 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   Future<void> passwordReset() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(
+            color: Colors.green,
+          ),
+        );
+      },
+    );
+
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text.trim());
+      Navigator.pop(context);
+      _showSuccessDialog(); 
     } on FirebaseAuthException catch (e) {
-      print(e.message);
+      Navigator.pop(context); 
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.deepPurple,
+            title: const Center(
+              child: Text(
+                'Error',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            content: Center(
+              child: Text(
+                e.message ?? 'An error occurred. Please try again later.',
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          );
+        },
+      );
     }
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          title: const Center(
+            child: Text(
+              'Success',
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+          content: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Password reset email has been sent.\nPlease check your email.',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.black, fontSize: 16), 
+                ),
+                const SizedBox(height: 20),
+                MyButton(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  text: 'OK',
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Forgot Password'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -39,36 +109,49 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           },
         ),
       ),
-      body: Center(
+      body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                Image.asset(
-                  'lib/images/snapSignWhiteBackground.jpg',
-                  width: 150,
-                  height: 150,
+          child: Stack(
+            children: [
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'lib/images/snapSignWhiteBackground.jpg',
+                      width: 150,
+                      height: 150,
+                    ),
+                    const Text(
+                      'Forgot Password',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                      'Provide email to reset password',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    MyTextField(
+                      controller: emailController,
+                      hintText: 'Email',
+                      obscureText: false,
+                      icon: Icons.email,
+                    ),
+                    const SizedBox(height: 20),
+                    MyButton(
+                      onTap: passwordReset,
+                      text: 'Reset Password',
+                    ),
+                  ],
                 ),
-                SizedBox(height: 20),
-                Text(
-                  'Please provide your email for the reset link',
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 20),
-                MyTextField(
-                  controller: emailController,
-                  hintText: 'Email',
-                  obscureText: false,
-                  icon: Icons.email,
-                ),
-                SizedBox(height: 20),
-                MyButton(
-                  onTap: passwordReset,
-                  text: 'Reset Password',
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

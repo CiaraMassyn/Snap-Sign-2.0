@@ -19,6 +19,8 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  String errorMessage = '';
+
   void signUserIn() async {
     showDialog(
       context: context,
@@ -40,45 +42,15 @@ class _LoginPageState extends State<LoginPage> {
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       if (e.code == 'user-not-found') {
-        wrongEmailMessage();
+        setState(() {
+          errorMessage = 'Incorrect email. Please try again.';
+        });
       } else if (e.code == 'wrong-password') {
-        wrongPasswordMessage();
+        setState(() {
+          errorMessage = 'Incorrect password. Please try again.';
+        });
       }
     }
-  }
-
-  void wrongEmailMessage() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const AlertDialog(
-          backgroundColor: Colors.deepPurple,
-          title: Center(
-            child: Text(
-              'Incorrect Email',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void wrongPasswordMessage() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const AlertDialog(
-          backgroundColor: Colors.deepPurple,
-          title: Center(
-            child: Text(
-              'Incorrect Password',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        );
-      },
-    );
   }
 
   void navigateToForgotPasswordPage() {
@@ -99,10 +71,10 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Center(
+        child: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -156,6 +128,14 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
+                    if (errorMessage.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          errorMessage,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
                     const SizedBox(height: 16),
                     MyButton(
                       onTap: signUserIn, 
@@ -228,8 +208,8 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
