@@ -31,6 +31,7 @@ class _DashboardState extends State<Dashboard> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+        selectedItemColor: Colors.green, // Set the selected item color to green
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_snapsign/components/my_textfield.dart';
+import 'package:flutter_snapsign/components/my_button.dart'; // Import MyButton widget
+import 'package:flutter_snapsign/components/my_textfield.dart'; // Import MyTextField widget
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
@@ -18,14 +19,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     super.dispose();
   }
 
-  Future passwordReset() async {
+  Future<void> passwordReset() async {
     try {
-      await FirebaseAuth.instance.
-        sendPasswordResetEmail(email: emailController.text.trim());
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text.trim());
     } on FirebaseAuthException catch (e) {
-      print(e);
+      print(e.message);
     }
-   
   }
 
   @override
@@ -41,25 +40,36 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Please provide your email for the reset link'),
-            SizedBox(height: 20),
-
-              MyTextField(
-                controller: emailController,
-                hintText: 'Email',
-                obscureText: false,
-                icon: Icons.email,
-              ),
-
-            MaterialButton(
-              onPressed: passwordReset,
-              child: Text('Reset Password'),
-              color: Colors.green,
-              )
-          ],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                Image.asset(
+                  'lib/images/snapSignWhiteBackground.jpg',
+                  width: 150,
+                  height: 150,
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Please provide your email for the reset link',
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 20),
+                MyTextField(
+                  controller: emailController,
+                  hintText: 'Email',
+                  obscureText: false,
+                  icon: Icons.email,
+                ),
+                SizedBox(height: 20),
+                MyButton(
+                  onTap: passwordReset,
+                  text: 'Reset Password',
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
