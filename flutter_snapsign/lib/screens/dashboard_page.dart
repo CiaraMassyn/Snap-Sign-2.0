@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_snapsign/screens/profile_page.dart';
-import 'package:flutter_snapsign/screens/upload_page.dart';
+import 'package:flutter_snapsign/screens/upload_document_page.dart';
 import 'home_page.dart';
 
 class Dashboard extends StatefulWidget {
