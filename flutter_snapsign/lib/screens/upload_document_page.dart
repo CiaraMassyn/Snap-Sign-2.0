@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:flutter_snapsign/screens/document_edit_page.dart';
+import 'package:flutter_snapsign/screens/document_view_page.dart';
 
 class UploadPage extends StatefulWidget {
   @override
@@ -11,44 +13,100 @@ class _UploadPageState extends State<UploadPage> {
   String? _filePath;
   String? _fileName;
 
+  final user = FirebaseAuth.instance.currentUser!;
+  void signUserOut() {
+    FirebaseAuth.instance.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Upload Page'),
+        backgroundColor: Colors.green,
+        leading: IconButton(
+          icon: const Icon(Icons.edit, color: Colors.white),
+          onPressed: () {},
+        ),
+        actions: [
+          IconButton(
+            onPressed: signUserOut,
+            icon: const Icon(Icons.logout),
+            color: Colors.white,
+          )
+        ],
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const Text(
+              'Upload Document',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _pickDocument,
-              child: Text('Upload PDF'),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+              ),
+              child: const Text(
+                'Upload PDF',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             if (_filePath != null) ...[
               Text(
                 'Selected File: $_fileName',
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_filePath != null) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DocumentPreviewPage(filePath: _filePath!),
+                        builder: (context) => DocumentPreviewPage(filePath: _filePath!, pdfUrl: '',),
                       ),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('No file selected')),
+                      const SnackBar(content: Text('No file selected')),
                     );
                   }
                 },
-                child: Text('View PDF'),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                ),
+                child: const Text(
+                  'View PDF',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (_filePath != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DocumentEditPage(filePath: _filePath!),
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('No file selected')),
+                    );
+                  }
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                ),
+                child: const Text(
+                  'Edit Document',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ],
@@ -69,25 +127,5 @@ class _UploadPageState extends State<UploadPage> {
         _fileName = result.files.single.name!;
       });
     }
-  }
-}
-
-class DocumentPreviewPage extends StatelessWidget {
-  final String filePath;
-
-  DocumentPreviewPage({required this.filePath});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Document Preview'),
-      ),
-      body: Center(
-        child: PDFView(
-          filePath: filePath,
-        ),
-      ),
-    );
   }
 }

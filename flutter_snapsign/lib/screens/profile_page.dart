@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfilePage extends StatelessWidget {
   final user = FirebaseAuth.instance.currentUser!;
-
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
@@ -13,11 +12,16 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
+        leading: IconButton(
+          icon: Icon(Icons.edit, color: Colors.white),
+          onPressed: () {
+          },
+        ),
         actions: [
           IconButton(
             onPressed: signUserOut,
             icon: Icon(Icons.logout),
-            color: Colors.black,
+            color: Colors.white,
           )
         ],
       ),
@@ -26,11 +30,16 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              'Profile',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
             Center(
               child: CircleAvatar(
                 radius: 50,
-                backgroundImage: NetworkImage(
-                    'https://www.example.com/your-image.jpg'), 
+                backgroundImage: NetworkImage(user.photoURL ?? ''),
+                backgroundColor: Colors.grey[200],
               ),
             ),
             SizedBox(height: 20),
@@ -38,7 +47,6 @@ class ProfilePage extends StatelessWidget {
               'Email: ${user.email}',
               style: TextStyle(fontSize: 20),
             ),
-            SizedBox(height: 10),
           ],
         ),
       ),

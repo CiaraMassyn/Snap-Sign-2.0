@@ -14,11 +14,16 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
+        leading: IconButton(
+          icon: Icon(Icons.edit, color: Colors.white),
+          onPressed: () {
+          },
+        ),
         actions: [
           IconButton(
             onPressed: signUserOut,
             icon: Icon(Icons.logout),
-            color: Colors.black,
+            color: Colors.white,
           )
         ],
       ),
@@ -28,14 +33,14 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Hi ${user.email}",
+              "Hi, ${user.displayName ?? user.email}",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
             Expanded(
               child: Center(
                 child: Text(
-                  "Welcome to your dashboard!",
+                  "Welcome back to your dashboard!",
                   style: TextStyle(fontSize: 16),
                 ),
               ),

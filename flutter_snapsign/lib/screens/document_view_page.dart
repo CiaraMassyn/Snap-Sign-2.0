@@ -1,62 +1,76 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_snapsign/screens/dashboard_page.dart';
 import 'package:flutter_snapsign/screens/document_edit_page.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 
 class DocumentPreviewPage extends StatelessWidget {
   final String pdfUrl;
   final String filePath;
 
-  const DocumentPreviewPage({Key? key, required this.pdfUrl, required this.filePath}) : super(key: key);
+  DocumentPreviewPage({Key? key, required this.pdfUrl, required this.filePath}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Document Preview'),
+        backgroundColor: Colors.green,
+        automaticallyImplyLeading: false, 
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                _downloadPdf(pdfUrl);
-              },
-              child: Text('Download Document'),
+      body: Stack(
+        children: [
+          Center(
+            child: PDFView(
+              filePath: filePath,
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DocumentEditPage(filePath: filePath),
+          ),
+          Positioned(
+            bottom: 20,
+            left: 0,
+            right: 0,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                    ),
+                    child: Text(
+                      'Back to Upload',
+                      style: TextStyle(color: Colors.green),
+                    ),
                   ),
-                );
-              },
-              child: Text('Edit Document'),
+                  ElevatedButton(
+                    onPressed: () {
+                      _editDocument(context, filePath);
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                    ),
+                    child: Text(
+                      'Edit Document',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => Dashboard()),
-                  (Route<dynamic> route) => false,
-                );
-              },
-              child: Text('Home'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Future<void> _downloadPdf(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+  Future<void> _editDocument(BuildContext context, String filePath) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DocumentEditPage(filePath: filePath),
+      ),
+    );
   }
 }
